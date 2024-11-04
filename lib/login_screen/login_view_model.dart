@@ -23,8 +23,10 @@ class LoginViewModel extends ChangeNotifier {
 
   //workshop 1
   void onDigitPressed(int digit, BuildContext context) {
-    _inputtedPin = _inputtedPin + digit.toString();
-    notifyListeners();
+    if (_inputtedPin.length < 6) {
+      _inputtedPin = _inputtedPin + digit.toString();
+      notifyListeners();
+    }
   }
 
   Future<void> onShowErrorDialogButtonPressed(BuildContext context) async {
