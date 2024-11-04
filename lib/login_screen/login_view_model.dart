@@ -10,6 +10,7 @@ import 'package:mobiletesting/secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
+  // _ is private in flutter
   String _inputtedPin = '';
   bool _isLoading = false;
 
@@ -83,7 +84,7 @@ class LoginViewModel extends ChangeNotifier {
 
   //workshop 2
   void onDeleteButtonPressed() {
-    if (inputtedPin.length > 0) {
+    if (inputtedPin.isNotEmpty) {
       _inputtedPin = _inputtedPin.substring(0, _inputtedPin.length - 1);
       notifyListeners();
     }
