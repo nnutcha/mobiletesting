@@ -23,7 +23,8 @@ class LoginViewModel extends ChangeNotifier {
 
   //workshop 1
   void onDigitPressed(int digit, BuildContext context) {
-    if (_inputtedPin.length < 6) {
+    final maxPinLength = 6;
+    if (_inputtedPin.length < maxPinLength) {
       _inputtedPin = _inputtedPin + digit.toString();
       notifyListeners();
     }
