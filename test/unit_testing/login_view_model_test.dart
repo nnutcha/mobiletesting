@@ -71,10 +71,30 @@ void main() {
     group('onDeleteButtonPressed', () {
       test(
           'given inputted pin is not empty when delete button is click then last digit from inputtedPin will be removed',
-          () {},
-          tags: 'unit');
-    });
+          () {
+        // Arrange
+        loginViewModel.onDigitPressed(1, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
 
+        // Act
+        loginViewModel.onDeleteButtonPressed();
+
+        // Assert
+        expect(loginViewModel.inputtedPin, "1");
+      }, tags: 'unit');
+
+      test(
+          'given inputted pin is empty when delete button is click then nothing happend',
+          () {
+        // Arrange
+
+        // Act
+        loginViewModel.onDeleteButtonPressed();
+
+        // Assert
+        expect(loginViewModel.inputtedPin, '');
+      }, tags: 'unit');
+    });
     group('navigation', () {});
   });
 }
