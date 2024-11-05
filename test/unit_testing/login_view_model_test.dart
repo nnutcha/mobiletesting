@@ -22,8 +22,7 @@ void main() {
       loginViewModel =
           LoginViewModel(mockLoginService, SortOrder.ascending, mockPinRules);
 
-      when(mockPinRules.getErrorMessage('123456'))
-          .thenReturn('this pin is invalid');
+      when(mockPinRules.getErrorMessage(any)).thenReturn('this pin is invalid');
 
       when(mockPinRules.getErrorMessage('122222')).thenReturn(null);
     });

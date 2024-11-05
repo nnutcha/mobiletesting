@@ -26,7 +26,19 @@ void main() {
 
         // Assert
         expect(pinrules.getErrorMessage("135789"), null);
-        expect(pinrules.getErrorMessage("000000"), null);
+        expect(pinrules.getErrorMessage("983124"), null);
+      }, tags: 'unit');
+
+      test(
+          'when pin is not sequential but repeating then return this pin is invalid',
+          () {
+        // Arrange
+
+        // Act
+
+        // Assert
+        expect(pinrules.getErrorMessage("123455"), 'this pin is invalid');
+        expect(pinrules.getErrorMessage("123451"), 'this pin is invalid');
       }, tags: 'unit');
     });
   });
