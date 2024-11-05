@@ -14,33 +14,35 @@ class LoginViewModel extends ChangeNotifier {
   // _ is private in flutter
   String _inputtedPin = '';
   bool _isLoading = false;
+  String _dialogMessage = '';
 
   final LoginService loginService;
   final SortOrder keyPadsortOrder;
+  final PinRules pinRules;
 
-  LoginViewModel(this.loginService, this.keyPadsortOrder);
+  LoginViewModel(this.loginService, this.keyPadsortOrder, this.pinRules);
 
   String get inputtedPin => _inputtedPin;
   bool get isLoading => _isLoading;
+  String get dialogMessage => _dialogMessage;
 
   //workshop 1
   void onDigitPressed(int digit, BuildContext context) {
     final maxPinLength = 6;
     if (_inputtedPin.length < maxPinLength) {
       _inputtedPin = _inputtedPin + digit.toString();
-      notifyListeners();
     }
     if (_inputtedPin.length == maxPinLength) {
-      final pinRules = PinRules();
       final errorMsg = pinRules.getErrorMessage(_inputtedPin);
       if (errorMsg != null) {
-        _showErrorDialog(errorMsg, context);
+        _dialogMessage = errorMsg;
+      } else {
+        _dialogMessage = "success";
       }
+    } else {
+      _dialogMessage = '';
     }
-  }
-
-  Future<void> onShowErrorDialogButtonPressed(BuildContext context) async {
-    _showErrorDialog("Workshop1", context);
+    notifyListeners();
   }
 
   //workshop 1
@@ -69,32 +71,15 @@ class LoginViewModel extends ChangeNotifier {
     );
   }
 
-  //workshop 0
-  void _showErrorDialog(String content, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Error"),
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   //workshop 2
   void onDeleteButtonPressed() {
     if (inputtedPin.isNotEmpty) {
       _inputtedPin = _inputtedPin.substring(0, _inputtedPin.length - 1);
       notifyListeners();
     }
+  }
+
+  void onDialogClose() {
+    _dialogMessage = '';
   }
 }

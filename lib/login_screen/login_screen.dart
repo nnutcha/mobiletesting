@@ -11,6 +11,29 @@ class LoginScreen extends StatelessWidget {
   static const routeName = 'pin-page';
 
   const LoginScreen({super.key});
+
+  //workshop 0
+  void _showErrorDialog(String content, BuildContext context,
+      void Function() onCloseButtonPressed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,18 +43,20 @@ class LoginScreen extends StatelessWidget {
       body: Center(
         child: Consumer<LoginViewModel>(
           builder: (context, viewModel, child) {
+            if (viewModel.dialogMessage.isNotEmpty) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _showErrorDialog(viewModel.dialogMessage, context, () {
+                  viewModel.onDialogClose();
+                });
+              });
+            }
+
             return Column(
               children: <Widget>[
                 Dot(
                   viewModel: viewModel,
                 ),
                 Text(viewModel.inputtedPin),
-                IconButton(
-                  onPressed: () {
-                    viewModel.onShowErrorDialogButtonPressed(context);
-                  },
-                  icon: Icon(Icons.error),
-                ),
                 viewModel.isLoading
                     ? const CircularProgressIndicator(
                         color: Color.fromARGB(255, 37, 9, 131),

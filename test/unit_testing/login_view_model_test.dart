@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobiletesting/login_screen/login_view_model.dart';
+import 'package:mobiletesting/login_screen/pin_rules.dart';
 import 'package:mobiletesting/login_screen/sort_order.dart';
 import 'package:mobiletesting/login_screen/login_service.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 import 'login_view_model_test.mocks.dart';
 
-@GenerateMocks([BuildContext, LoginService])
+@GenerateMocks([BuildContext, LoginService, PinRules])
 void main() {
   group('LoginViewModel', () {
     late LoginViewModel loginViewModel;
     late MockLoginService mockLoginService;
+    late MockPinRules mockPinRules;
 
     setUp(() {
       mockLoginService = MockLoginService();
-      loginViewModel = LoginViewModel(mockLoginService, SortOrder.ascending);
+      mockPinRules = MockPinRules();
+      loginViewModel =
+          LoginViewModel(mockLoginService, SortOrder.ascending, mockPinRules);
+
+      when(mockPinRules.getErrorMessage('123456'))
+          .thenReturn('this pin is invalid');
+
+      when(mockPinRules.getErrorMessage('123458')).thenReturn(null);
     });
 
     group('onDigitPressed', () {
@@ -65,7 +75,33 @@ void main() {
         // Assert
         expect(loginViewModel.inputtedPin, "123456");
       }, tags: 'unit');
-      group('FE pin validation', () {});
+      group('FE pin validation', () {
+        test('when inputted 6 digits then got error', () {
+          // Arrange
+          // Act
+          loginViewModel.onDigitPressed(1, MockBuildContext());
+          loginViewModel.onDigitPressed(2, MockBuildContext());
+          loginViewModel.onDigitPressed(3, MockBuildContext());
+          loginViewModel.onDigitPressed(4, MockBuildContext());
+          loginViewModel.onDigitPressed(5, MockBuildContext());
+          loginViewModel.onDigitPressed(6, MockBuildContext());
+          // Assert
+          expect(loginViewModel.dialogMessage, 'this pin is invalid');
+        });
+
+        test('when inputted 6 digits return success', () {
+          // Arrange
+          // Act
+          loginViewModel.onDigitPressed(1, MockBuildContext());
+          loginViewModel.onDigitPressed(2, MockBuildContext());
+          loginViewModel.onDigitPressed(3, MockBuildContext());
+          loginViewModel.onDigitPressed(4, MockBuildContext());
+          loginViewModel.onDigitPressed(5, MockBuildContext());
+          loginViewModel.onDigitPressed(8, MockBuildContext());
+          // Assert
+          expect(loginViewModel.dialogMessage, 'success');
+        });
+      });
       group('handle network call', () {});
 
       test('dot filled', () {
