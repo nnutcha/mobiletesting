@@ -25,7 +25,7 @@ void main() {
       when(mockPinRules.getErrorMessage('123456'))
           .thenReturn('this pin is invalid');
 
-      when(mockPinRules.getErrorMessage('123458')).thenReturn(null);
+      when(mockPinRules.getErrorMessage('122222')).thenReturn(null);
     });
 
     group('onDigitPressed', () {
@@ -75,33 +75,7 @@ void main() {
         // Assert
         expect(loginViewModel.inputtedPin, "123456");
       }, tags: 'unit');
-      group('FE pin validation', () {
-        test('when inputted 6 digits then got error', () {
-          // Arrange
-          // Act
-          loginViewModel.onDigitPressed(1, MockBuildContext());
-          loginViewModel.onDigitPressed(2, MockBuildContext());
-          loginViewModel.onDigitPressed(3, MockBuildContext());
-          loginViewModel.onDigitPressed(4, MockBuildContext());
-          loginViewModel.onDigitPressed(5, MockBuildContext());
-          loginViewModel.onDigitPressed(6, MockBuildContext());
-          // Assert
-          expect(loginViewModel.dialogMessage, 'this pin is invalid');
-        });
-
-        test('when inputted 6 digits return success', () {
-          // Arrange
-          // Act
-          loginViewModel.onDigitPressed(1, MockBuildContext());
-          loginViewModel.onDigitPressed(2, MockBuildContext());
-          loginViewModel.onDigitPressed(3, MockBuildContext());
-          loginViewModel.onDigitPressed(4, MockBuildContext());
-          loginViewModel.onDigitPressed(5, MockBuildContext());
-          loginViewModel.onDigitPressed(8, MockBuildContext());
-          // Assert
-          expect(loginViewModel.dialogMessage, 'success');
-        });
-      });
+      group('FE pin validation', () {});
       group('handle network call', () {});
 
       test('dot filled', () {
@@ -141,6 +115,38 @@ void main() {
 
         // Assert
         expect(loginViewModel.inputtedPin, '');
+      }, tags: 'unit');
+    });
+
+    group('onShowErrorMeassage', () {
+      test('when inputted pin is success then error message not show', () {
+        // Arrange
+        loginViewModel.onDigitPressed(1, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+
+        // Act
+
+        // Assert
+        expect(loginViewModel.dialogMessage, "success");
+      }, tags: 'unit');
+
+      test('when inputted pin is fail then error message show', () {
+        // Arrange
+        loginViewModel.onDigitPressed(1, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(3, MockBuildContext());
+        loginViewModel.onDigitPressed(4, MockBuildContext());
+        loginViewModel.onDigitPressed(5, MockBuildContext());
+        loginViewModel.onDigitPressed(6, MockBuildContext());
+
+        // Act
+
+        // Assert
+        expect(loginViewModel.dialogMessage, "this pin is invalid");
       }, tags: 'unit');
     });
     group('navigation', () {});
