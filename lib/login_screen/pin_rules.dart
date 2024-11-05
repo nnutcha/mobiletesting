@@ -6,7 +6,7 @@ class PinRule {}
 class PinRules {
   final List<PinRule> _rules = [];
 
-  bool isSequential(String numberStr) {
+  bool _isSequential(String numberStr) {
     // Check if the string is empty or has only one character
     if (numberStr.length <= 1) return true;
 
@@ -23,7 +23,26 @@ class PinRules {
     return true;
   }
 
+  bool _isRepeatNumber(String pin) {
+    return pin.length != pin.split('').toSet().length;
+  }
+
+  bool _isSum15(String pin) {
+    return 15 ==
+        pin
+            .split('') // Split the string into individual characters
+            .map(int.parse) // Convert each character to an integer
+            .reduce((a, b) => a + b);
+  }
+
   String? getErrorMessage(String pin) {
-    return isSequential(pin) ? "this pin is invalid" : null;
+    if (_isSequential(pin)) {
+      return "this pin is invalid";
+    } else if (_isRepeatNumber(pin)) {
+      return "this pin is invalid";
+    } else if (_isSum15(pin)) {
+      return "this pin is invalid";
+    }
+    return null;
   }
 }
