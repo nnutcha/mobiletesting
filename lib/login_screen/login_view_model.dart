@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mobiletesting/home_screen/home_screen.dart';
 import 'package:mobiletesting/home_screen/home_view_model.dart';
+import 'package:mobiletesting/login_screen/dot_view.dart';
 import 'package:mobiletesting/login_screen/pin_rules.dart';
 import 'package:mobiletesting/login_screen/sort_order.dart';
 import 'package:mobiletesting/login_screen/login_service.dart';
@@ -28,6 +29,13 @@ class LoginViewModel extends ChangeNotifier {
     if (_inputtedPin.length < maxPinLength) {
       _inputtedPin = _inputtedPin + digit.toString();
       notifyListeners();
+    }
+    if (_inputtedPin.length == maxPinLength) {
+      final pinRules = PinRules();
+      final errorMsg = pinRules.getErrorMessage(_inputtedPin);
+      if (errorMsg != null) {
+        _showErrorDialog(errorMsg, context);
+      }
     }
   }
 

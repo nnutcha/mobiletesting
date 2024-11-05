@@ -67,6 +67,18 @@ void main() {
       }, tags: 'unit');
       group('FE pin validation', () {});
       group('handle network call', () {});
+
+      test('dot filled', () {
+        // Arrange
+        loginViewModel.onDigitPressed(1, MockBuildContext());
+        loginViewModel.onDigitPressed(2, MockBuildContext());
+        loginViewModel.onDigitPressed(3, MockBuildContext());
+        loginViewModel.onDigitPressed(4, MockBuildContext());
+
+        // Act
+
+        // Assert
+      }, tags: 'unit');
     });
     group('onDeleteButtonPressed', () {
       test(
