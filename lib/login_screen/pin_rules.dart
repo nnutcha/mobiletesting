@@ -24,6 +24,6 @@ class PinRules {
   }
 
   String? getErrorMessage(String pin) {
-    return isSequential(pin) ? "his pin is invalid" : null;
+    return isSequential(pin) ? "this pin is invalid" : null;
   }
 }
